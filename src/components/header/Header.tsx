@@ -1,9 +1,6 @@
-import {
-    PopoverGroup,
-} from '@headlessui/react'
-import {
-    Bars3Icon,
-} from '@heroicons/react/24/outline'
+import { Bars3Icon } from '@heroicons/react/24/outline'
+import { Link } from 'react-router-dom';
+import { PopoverGroup } from '@headlessui/react';
 
 export default function Example() {
 
@@ -11,10 +8,10 @@ export default function Example() {
         <header className="bg-white">
             <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
                 <div className="flex lg:flex-1">
-                    <a href="#" className="-m-1.5 p-1.5">
+                    <Link to="/" className="-m-1.5 p-1.5">
                         <span className="sr-only">Your Company</span>
                         <img alt="" src="src/assets/Betandro-logo.png" className="h-8 w-auto" />
-                    </a>
+                    </Link>
                 </div>
                 <div className="flex lg:hidden">
                     <button
@@ -26,15 +23,15 @@ export default function Example() {
                     </button>
                 </div>
                 <PopoverGroup className="hidden lg:flex lg:gap-x-12">
-                    <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-                        Pronostique du jour
-                    </a>
-                    <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+                    <Link to="/daily-bet" className="text-sm font-semibold leading-6 text-gray-900">
+                        Pronostic du jour
+                    </Link>
+                    <Link to="/paris" className="text-sm font-semibold leading-6 text-gray-900">
                         Mes paris
-                    </a>
-                    <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-                        Qui sommes nous ?
-                    </a>
+                    </Link>
+                    <Link to="/about" className="text-sm font-semibold leading-6 text-gray-900">
+                        Qui sommes-nous ?
+                    </Link>
                 </PopoverGroup>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
                     <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
