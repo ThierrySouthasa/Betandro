@@ -75,3 +75,29 @@ export async function GET(req: Request) {
         return NextResponse.json({ error: 'Erreur serveur', details: err instanceof Error ? err.message : String(err) }, { status: 500 });
     }
 }
+
+// Handle PATCH request (update result)
+export async function PATCH(req: Request) {
+    try {
+        const body = await req.json();
+        const patchSchema = z.object({
+            id: z.number().int().positive(),
+            result: z.enum(['PENDING', 'WON', 'LOST']).refine((v) => v !== 'PENDING', {
+                message: 'Result must be WON or LOST when updating',
+            }),
+        });
+        const validation = patchSchema.safeParse(body);
+        if (!validation.success) {
+            return NextResponse.json({ error: 'Validation error', issues: validation.error.issues }, { status: 400 });
+        }
+        const { id, result } = validation.data;
+        const updated = await prisma.pronostic.update({
+            where: { id },
+            data: { result },
+        });
+        return NextResponse.json(updated, { status: 200 });
+    } catch (err) {
+        console.error('Erreur lors de la mise à jour du pronostic :', err);
+        return NextResponse.json({ error: 'Erreur serveur', details: err instanceof Error ? err.message : String(err) }, { status: 500 });
+    }
+}

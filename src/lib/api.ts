@@ -28,4 +28,17 @@ export async function fetchPronostics(params?: { take?: number; skip?: number })
     return res.json();
 }
 
+export async function updatePronosticResult(id: number, result: 'WON' | 'LOST'): Promise<Pronostic> {
+    const res = await fetch('/api/pronostic', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, result }),
+    });
+    if (!res.ok) {
+        const details = await res.text().catch(() => '');
+        throw new Error(`Failed to update pronostic (${res.status}): ${details}`);
+    }
+    return res.json();
+}
+
 

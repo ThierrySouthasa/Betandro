@@ -1,11 +1,21 @@
 "use client";
 
 import { usePronostics } from "@/hooks/usePronostics";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updatePronosticResult } from "@/lib/api";
 
 type FilterMode = 'ALL' | 'PENDING' | 'NON_PENDING'
 
 export default function PronosticTable({ filter = 'ALL' }: { filter?: FilterMode }) {
+    const queryClient = useQueryClient();
     const { data, isLoading, error } = usePronostics({ take: 100 });
+
+    const { mutateAsync: setResult, isPending: isMutating } = useMutation({
+        mutationFn: ({ id, result }: { id: number; result: 'WON' | 'LOST' }) => updatePronosticResult(id, result),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['pronostics'] });
+        },
+    });
 
     if (isLoading) {
         return <p className="mt-6 text-sm text-gray-500">Chargement des pronostics…</p>;
@@ -44,7 +54,27 @@ export default function PronosticTable({ filter = 'ALL' }: { filter?: FilterMode
                     <td className="px-4 py-3">{p.teamB}</td>
                     <td className="px-4 py-3">{p.odds}</td>
                     <td className="px-4 py-3 text-red-500">{p.prediction}</td>
-                    <td className="px-4 py-3">{p.result}</td>
+                    <td className="px-4 py-3">
+                        {p.result === 'PENDING' && (
+                            <div className="flex gap-2">
+                                <button
+                                    className="px-2 py-1 text-xs rounded bg-green-600 text-white disabled:opacity-50"
+                                    disabled={isMutating}
+                                    onClick={() => setResult({ id: p.id, result: 'WON' })}
+                                >
+                                    WON
+                                </button>
+                                <button
+                                    className="px-2 py-1 text-xs rounded bg-red-600 text-white disabled:opacity-50"
+                                    disabled={isMutating}
+                                    onClick={() => setResult({ id: p.id, result: 'LOST' })}
+                                >
+                                    LOST
+                                </button>
+                            </div>
+                        )}
+                        {p.result !== 'PENDING' && <span>{p.result}</span>}
+                    </td>
                 </tr>
             ))}
             </tbody>
