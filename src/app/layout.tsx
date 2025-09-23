@@ -3,6 +3,7 @@ import "../styles/globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import React from "react";
+import Providers from "@/components/Providers";
 
 export const metadata: Metadata = {
   title: "Betandro",
@@ -17,13 +18,13 @@ export default function RootLayout({
   return (
       <html lang="en">
       <body className="flex flex-col min-h-screen">
-        <Header />
-
-      <main className="flex-grow max-w-screen-xl mx-auto px-4 py-6 mt-[56px] mb-[56px]">
-          {children}
-      </main>
-
-      <Footer />
+        <Providers>
+          <Header />
+          <main className="flex-grow max-w-screen-xl mx-auto px-4 py-6 mt-[56px] mb-[56px]">
+            {children}
+          </main>
+          <Footer />
+        </Providers>
       </body>
       </html>
   );

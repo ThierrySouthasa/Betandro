@@ -2,9 +2,11 @@
 
 import React, { useState } from 'react';
 import PronosticCard from "@/components/PronosticCard";
+import { usePronostics } from "@/hooks/usePronostics";
 
 export default function HomePage() {
     const [form, setForm] = useState({ name: '', email: '', message: '' });
+    const { data, isLoading, error } = usePronostics({ take: 100 });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -20,7 +22,7 @@ export default function HomePage() {
             <section className="text-center">
                 <h1 className="text-4xl font-bold text-red-500 mb-4">Le Meilleur Pronostiqueur</h1>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                    Fort d une expérience de plusieurs années dans le monde du pari sportif, j'analyse chaque match avec
+                    Fort d'une expérience de plusieurs années dans le monde du pari sportif, j'analyse chaque match avec
                     précision. Mon objectif : vous faire gagner !
                 </p>
             </section>
@@ -48,26 +50,22 @@ export default function HomePage() {
 
             <section>
                 <h2 className="text-2xl font-bold text-red-500 text-center mb-6">Exemples de Paris Récents</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[
-                        {
-                            equipe1: 'Real Madrid',
-                            equipe2: 'Barcelone',
-                            score: '2-1',
-                            cote: 2.2,
-                            pronostic: 'Real Madrid'
-                        },
-                        {equipe1: 'PSG', equipe2: 'OM', score: '3-0', cote: 1.8, pronostic: 'PSG'},
-                        {
-                            equipe1: 'Manchester City',
-                            equipe2: 'Arsenal',
-                            score: '2-2',
-                            cote: 3.1,
-                            pronostic: 'Match nul'
-                        },
-                    ].map((p, i) => (
-                        <PronosticCard key={i} {...p} />
-                    ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {isLoading && <div className="text-sm text-gray-500">Chargement…</div>}
+                    {error && <div className="text-sm text-red-600">Erreur: {error.message}</div>}
+                    {!isLoading && !error && (data ?? [])
+                        .filter(p => p.result !== 'PENDING')
+                        .slice(0, 4)
+                        .map((p) => (
+                            <PronosticCard
+                                key={p.id}
+                                equipe1={p.teamA}
+                                equipe2={p.teamB}
+                                score=""
+                                cote={p.odds}
+                                pronostic={p.prediction}
+                            />
+                        ))}
                 </div>
             </section>
 

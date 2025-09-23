@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 Int                @id @default(autoincrement())
+  email              String             @unique
+  firstName          String
+  lastName           String
+  password           String
+  subscriptionDate   DateTime?
+  SubscriptionType   SubscriptionType
+  SubscriptionStatus SubscriptionStatus @default(NONE)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+}
+
+model Pronostic {
+  id         Int              @id @default(autoincrement())
+  sport      String
+  teamA      String
+  teamB      String
+  odds       Float
+  prediction String
+  result     BetResult        @default(PENDING)
+  visibleTo  SubscriptionType @default(FREE)
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+}
+
+enum BetResult {
+  PENDING
+  WON
+  LOST
+}
+
+enum SubscriptionType {
+  FREE
+  BASIC
+  PREMIUM
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  EXPIRED
+  TRIAL
+  SUSPENDED
+  NONE
+}
