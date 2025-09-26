@@ -1,21 +1,12 @@
-// /pages/api/test-db.ts
+import { createClient } from '@supabase/supabase-js';
+import { NextResponse } from 'next/server';
 
-import { PrismaClient } from "../../../generated/prisma";
-import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
-
-import type { NextApiRequest, NextApiResponse } from 'next';
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 export async function GET() {
-  try {
-    const result = await prisma.$queryRaw`SELECT 1`;
-    return NextResponse.json({ success: true, result });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    return NextResponse.json({ success: false, error: message }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
-  }
+  const { data, error } = await supabase.from('pronostic').select('*');
+  return NextResponse.json({ data, error });
 }
-
