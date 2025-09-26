@@ -22,8 +22,7 @@ export default function HomePage() {
             <section className="text-center">
                 <h1 className="text-4xl font-bold text-red-500 mb-4">Le Meilleur Pronostiqueur</h1>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                    Fort d'une expérience de plusieurs années dans le monde du pari sportif, j'analyse chaque match avec
-                    précision. Mon objectif : vous faire gagner !
+                    {"Fort d'une expérience de plusieurs années dans le monde du pari sportif, j'analyse chaque match avec précision. Mon objectif : vous faire gagner !"}
                 </p>
             </section>
 

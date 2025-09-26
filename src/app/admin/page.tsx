@@ -5,7 +5,7 @@ import PronosticForm from '@/components/PronosticForm';
 import { usePronostics } from '@/hooks/usePronostics';
 
 export default function AdminPage() {
-    const { data, isLoading, error } = usePronostics({ take: 100 });
+    const { isLoading, error } = usePronostics({ take: 100 });
 
     return (
         <div className="max-w-screen-xl mx-auto px-4 py-10 space-y-10">
