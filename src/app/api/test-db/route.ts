@@ -7,6 +7,6 @@ const supabase = createClient(
 );
 
 export async function GET() {
-  const { data, error } = await supabase.from('pronostic').select('*');
+  const { data, error } = await supabase.from('Pronostic').select('*');
   return NextResponse.json({ data, error });
 }
