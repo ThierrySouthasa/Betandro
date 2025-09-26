@@ -32,6 +32,8 @@ model Pronostic {
   visibleTo  SubscriptionType @default(FREE)
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
+
+  @@map("Pronostic")
 }
 
 enum BetResult {
